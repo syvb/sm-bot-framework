@@ -104,6 +104,17 @@ class Battle {
     return retVal;
   }
 }
+async function getSMJson(url) {
+  const res = await (fetch("https://api.steemmonsters.io" + url));
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    console.log("Invalid JSON; retrying", text)
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return await getSMJson();
+  }
+}
 
 async function main() {
   let curBlock = -1;
