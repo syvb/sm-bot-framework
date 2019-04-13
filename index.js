@@ -120,6 +120,16 @@ async function main() {
       .map(card => ({...card, rarity: cardData.filter(cardD => card.card_detail_id === cardD.id)[0].rarity}))
       .sort((a, b) => { console.log(a,b); return cardBcx(a.xp, a.rarity, a.edition, a.gold) - cardBcx(b.xp, b.rarity, b.edition, b.gold) }).reverse()[0];
   }
+  function canPlayCard(card) {
+    if (card.market_id)
+      return false;
+    if (!card.last_transferred_block || !card.last_used_block)
+      return true;
+
+    if (curBlock === -1) return true;
+    var last_block = curBlock;
+    return card.last_transferred_block <= last_block - 201600 || card.last_used_block <= last_block - 201600;
+  }
   var submittedTeam = false;
   const battle = new Battle(async status => {
     if (!submittedTeam && (status.statusName === "enemyFound")) {
