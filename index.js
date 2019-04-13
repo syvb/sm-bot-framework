@@ -144,8 +144,9 @@ async function main() {
   }
   var submittedTeam = false;
   const battle = new Battle(async status => {
+    console.log(status.statusName);
     if (!submittedTeam && (status.statusName === "enemyFound")) {
-      battle.broadcastTeam(bestCard(27), []);
+      battle.broadcastTeam(bestCard(5).uid, []);
       submittedTeam = true;
     }
   });
