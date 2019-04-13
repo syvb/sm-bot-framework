@@ -2,6 +2,7 @@ const steem = require("steem");
 const fetch = require("node-fetch");
 const md5 = require("md5");
 const KEYS = require("./keys.json");
+const cardData = require("./cardData.json");
 
 class Battle {
   constructor(callback, appName = "smitopbot-public/1.0.0", matchType = "Ranked") {
