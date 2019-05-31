@@ -3,6 +3,64 @@ const fetch = require("node-fetch");
 const md5 = require("md5");
 const KEYS = require("./keys.json");
 const cardData = require("./cardData.json");
+function cardBcx(xp, rarity, edition, gold) {
+        if (edition === 3) edition = 1; //reward cards are same as beta
+        var cards = 0;
+        if (edition == 0 && gold == 0 && rarity == 4)
+            cards = (xp / 1000) +1
+        if (edition == 0 && gold == 0 && rarity == 3)
+            cards = (xp / 250) +1
+        if (edition == 0 && gold == 0 && rarity == 2)
+            cards = (xp / 100) +1
+        if (edition == 0 && gold == 0 && rarity == 1)
+            cards = (xp / 20) +1
+        if (edition == 0 && gold == 1 && rarity == 4)
+            cards = xp / 2500
+        if (edition == 0 && gold == 1 && rarity == 3)
+            cards = xp / 1000
+        if (edition == 0 && gold == 1 && rarity == 2)
+            cards = xp / 500
+        if (edition == 0 && gold == 1 && rarity == 1)
+            cards = xp / 250
+
+        // Beta Edition Cards per XP
+        if (edition == 1 && gold == 0 && rarity == 4)
+            cards = (xp / 750) +1
+        if (edition == 1 && gold == 0 && rarity == 3)
+            cards = (xp / 175) +1
+        if (edition == 1 && gold == 0 && rarity == 2)
+            cards = (xp / 75) +1
+        if (edition == 1 && gold == 0 && rarity == 1)
+            cards = (xp / 15) +1
+        if (edition == 1 && gold == 1 && rarity == 4)
+            cards = xp / 2000
+        if (edition == 1 && gold == 1 && rarity == 3)
+            cards = xp / 800
+        if (edition == 1 && gold == 1 && rarity == 2)
+            cards = xp / 400
+        if (edition == 1 && gold == 1 && rarity == 1)
+            cards = xp / 200
+        // Promo Edition Cards per XP
+        if (edition == 2 && gold == 0 && rarity == 4)
+            cards = (xp / 1000) +1
+        if (edition == 2 && gold == 0 && rarity == 3)
+            cards = (xp / 250) +1
+        if (edition == 2 && gold == 0 && rarity == 2)
+            cards = (xp / 100) +1
+        if (edition == 2 && gold == 0 && rarity == 1)
+            cards = (xp / 20) +1
+        if (edition == 2 && gold == 1 && rarity == 4)
+            cards = xp / 2500
+        if (edition == 2 && gold == 1 && rarity == 3)
+            cards = xp / 1000
+        if (edition == 2 && gold == 1 && rarity == 2)
+            cards = xp / 500
+        if (edition == 2 && gold == 1 && rarity == 1)
+            cards = xp / 250
+        if (cards === 0) throw new Error("Unable to find card BCX");
+        return cards
+      }
+
 
 class Battle {
   constructor(callback, appName = "smitopbot-public/1.0.0", matchType = "Ranked") {
