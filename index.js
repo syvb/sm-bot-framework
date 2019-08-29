@@ -105,6 +105,8 @@ class Battle {
       data.summoner = summoner;
       data.monsters = monsters;
       data.secret = secret;
+    } else {
+      this.pendingReveal = true;
     }
     steem.broadcast.customJson(KEYS.posting, [], [KEYS.username], "sm_submit_team", JSON.stringify(data), async (err, result) => {
       if (err) throw err;
@@ -120,12 +122,10 @@ class Battle {
           secret: secret
         }), (err, result) => {
           console.log("Revealed team!");
+          this.pendingReveal = false;
         });
       }
     });
-  }
-  _revealTeam() {
-
   }
   async _checkBattleStatus() {
     if (!this.findMatchId) return;
@@ -134,10 +134,18 @@ class Battle {
     this.status.data = json;
 
     if ((typeof json) === "string") {
-      console.log(json);
-      this.status.statusName = "battleTxProcessing";
+      if (this.battleTxEverProcessed && this.revealPending) {
+        this.status.statusName = "revealPending";
+      } else if (this.battleTxEverProcessed) {
+        this.status.statusName = "battleDone";
+      } else {
+        console.log(json);
+        this.status.statusName = "battleTxProcessing";;
+      }
       this.callback(this.status);
       return;
+    } else {
+      this.battleTxEverProcessed = true;
     }
 
     if (json.error) {
@@ -191,7 +199,7 @@ async function main() {
       .sort((a, b) => { console.log(a,b); return cardBcx(a.xp, a.rarity, a.edition, a.gold) - cardBcx(b.xp, b.rarity, b.edition, b.gold) }).reverse()[0];
   }
   function canPlayCard(card) {
-    if (card.market_id)
+    if (card.market_id || card.delegated_to)
       return false;
     if (!card.last_transferred_block || !card.last_used_block)
       return true;
